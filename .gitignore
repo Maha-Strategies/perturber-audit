@@ -1,0 +1,5 @@
+SurveySimulator/
+__pycache__/
+*.pyc
+venv/
+synthetic_population.txt
