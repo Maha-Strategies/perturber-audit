@@ -709,19 +709,39 @@ with open('simulated_null_varpi.txt', 'w') as f:
         f.write(f"{v:.5f}\n")
 
 # ----------------- Observed eTNO Detections -----------------
-observed_etnos = [
+# We define three sample configurations:
+# 1. Old sample (N=4)
+# 2. Reconstructed Convention A characterized sample (N=9)
+# 3. Reconstructed Convention B characterized sample (N=3)
+
+old_sample_varpi = [(ob['omega'] + ob['Omega']) % 360.0 for ob in [
     {'name': 'o3e39', 'a': 150.24, 'e': 0.727, 'q': 41.03, 'i': 33.539, 'Omega': 210.727, 'omega': 42.588},
     {'name': 'o3l83', 'a': 200.26, 'e': 0.781, 'q': 43.93, 'i': 10.652, 'Omega': 191.954, 'omega': 252.127},
     {'name': 'L3h08', 'a': 159.68, 'e': 0.761, 'q': 38.10, 'i': 15.500, 'Omega': 197.871, 'omega': 10.841},
     {'name': 'L5r01', 'a': 153.76, 'e': 0.746, 'q': 39.00, 'i': 20.447, 'Omega': 306.114, 'omega': 32.537}
+]]
+
+# Reconstructed characterized sample A (a > 150 AU, q > 30 AU): 9 objects
+# Includes CFEPS (L3h08, L5r01) and characterized OSSOS from Table 1 of Shankman et al. (2017)
+# (excluding uncharacterized uo3l91/2013 SY99)
+reconstructed_a_varpi = [
+    208.712, # L3h08
+    338.651, # L5r01
+    253.315, # 2013 GP136 (o3e39)
+    298.400, # 2015 KH163 (o5m85)
+    84.081,  # 2013 UT15 (o3l83)
+    336.000, # 2015 RY245 (o5s13)
+    175.100, # 2015 GT50 (o5p060)
+    73.800,  # 2015 RX245 (o5t52)
+    251.200  # 2015 KG163 (o5m52)
 ]
 
-print("\nObserved eTNOs in characterized CFEPS/OSSOS sample:")
-observed_varpi = []
-for ob in observed_etnos:
-    v = (ob['omega'] + ob['Omega']) % 360.0
-    observed_varpi.append(v)
-    print(f"  {ob['name']}: a={ob['a']:.2f}, q={ob['q']:.2f}, varpi={v:.1f} (omega={ob['omega']:.1f}, Omega={ob['Omega']:.1f})")
+# Reconstructed characterized sample B (a > 250 AU, q > 30 AU): 3 objects
+reconstructed_b_varpi = [
+    175.100, # 2015 GT50 (o5p060)
+    73.800,  # 2015 RX245 (o5t52)
+    251.200  # 2015 KG163 (o5m52)
+]
 
 def calc_rayleigh(angles_deg):
     angles_rad = np.radians(angles_deg)
@@ -730,27 +750,50 @@ def calc_rayleigh(angles_deg):
     R = np.sqrt(sum_cos**2 + sum_sin**2)
     return R
 
-R_obs = calc_rayleigh(observed_varpi)
-print(f"\nObserved Rayleigh Statistic R_obs: {R_obs:.4f} (normalized: {R_obs / len(observed_varpi):.4f})")
-
-# Monte Carlo significance test
-n_trials = 10000
 simulated_varpi = np.array(simulated_varpi)
-R_sims = []
 
-for _ in range(n_trials):
-    samples = np.random.choice(simulated_varpi, size=len(observed_varpi), replace=True)
-    R_sims.append(calc_rayleigh(samples))
+# Run Monte Carlo Rayleigh tests
+def run_mc_analysis(observed_varpi, null_pool, name, n_trials=10000):
+    R_obs = calc_rayleigh(observed_varpi)
+    N = len(observed_varpi)
+    R_sims = []
+    for _ in range(n_trials):
+        samples = np.random.choice(null_pool, size=N, replace=True)
+        R_sims.append(calc_rayleigh(samples))
+    R_sims = np.array(R_sims)
+    p_value = np.sum(R_sims >= R_obs) / n_trials
+    return R_obs, p_value
 
-R_sims = np.array(R_sims)
-p_value = np.sum(R_sims >= R_obs) / n_trials
+# Perform evaluations
+# We do NOT re-seed between runs to preserve the sequential state of np.random,
+# but we document the results under the original random flow.
+# Let's run the old sample first to match the original random flow.
+R_old, p_old = run_mc_analysis(old_sample_varpi, simulated_varpi, "Old Sample")
 
-print(f"Monte Carlo p-value (seed 42, N={n_trials}): {p_value:.4f}")
+# For the new samples, let's run them too
+R_new_a, p_new_a = run_mc_analysis(reconstructed_a_varpi, simulated_varpi, "Reconstructed Convention A")
+R_new_b, p_new_b = run_mc_analysis(reconstructed_b_varpi, simulated_varpi, "Reconstructed Convention B")
 
+print("\n--- Consolidated Rayleigh Test Results ---")
+print(f"Old Sample (N=4): R_obs={R_old:.5f}, p_value={p_old:.5f}")
+print(f"Reconstructed Convention A (N=9): R_obs={R_new_a:.5f}, p_value={p_new_a:.5f}")
+print(f"Reconstructed Convention B (N=3): R_obs={R_new_b:.5f}, p_value={p_new_b:.5f}")
+
+# Save results to clustering_results.txt
 with open('clustering_results.txt', 'w') as f:
-    f.write(f"R_obs={R_obs:.5f}\n")
-    f.write(f"p_value={p_value:.5f}\n")
-    f.write(f"N_obs={len(observed_varpi)}\n")
-    f.write(f"observed_varpi={','.join(map(str, observed_varpi))}\n")
+    f.write(f"--- Old Sample (N=4) ---\n")
+    f.write(f"R_obs={R_old:.5f}\n")
+    f.write(f"p_value={p_old:.5f}\n")
+    f.write(f"observed_varpi={','.join(map(str, old_sample_varpi))}\n\n")
+    
+    f.write(f"--- Reconstructed Convention A (N=9) ---\n")
+    f.write(f"R_obs={R_new_a:.5f}\n")
+    f.write(f"p_value={p_new_a:.5f}\n")
+    f.write(f"observed_varpi={','.join(map(str, reconstructed_a_varpi))}\n\n")
+    
+    f.write(f"--- Reconstructed Convention B (N=3) ---\n")
+    f.write(f"R_obs={R_new_b:.5f}\n")
+    f.write(f"p_value={p_new_b:.5f}\n")
+    f.write(f"observed_varpi={','.join(map(str, reconstructed_b_varpi))}\n")
 
-print("\nClustering test completed and results saved to 'clustering_results.txt'.")
+print("\nClustering test completed and consolidated results saved to 'clustering_results.txt'.")

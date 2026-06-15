@@ -1,0 +1,17 @@
+Python_detections=33
+Fortran_detections=55
+a_ks=0.30303
+a_p=0.03701
+a_w=55.03191
+q_ks=0.12727
+q_p=0.85553
+q_w=3.11278
+i_ks=0.10909
+i_p=0.94680
+i_w=1.84393
+varpi_ks=0.11515
+varpi_p=0.92161
+varpi_w=12.86001
+H_ks=0.17576
+H_p=0.49887
+H_w=0.24711

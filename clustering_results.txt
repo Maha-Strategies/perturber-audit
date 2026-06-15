@@ -1,4 +1,14 @@
+--- Old Sample (N=4) ---
 R_obs=0.81802
 p_value=0.87610
-N_obs=4
 observed_varpi=253.315,84.08100000000002,208.71200000000002,338.65099999999995
+
+--- Reconstructed Convention A (N=9) ---
+R_obs=2.00709
+p_value=0.74850
+observed_varpi=208.712,338.651,253.315,298.4,84.081,336.0,175.1,73.8,251.2
+
+--- Reconstructed Convention B (N=3) ---
+R_obs=1.04433
+p_value=0.73700
+observed_varpi=175.1,73.8,251.2

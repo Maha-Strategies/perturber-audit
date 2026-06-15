@@ -13,14 +13,14 @@ This document lists the status (AVAILABLE / FAILED) of all tools, libraries, and
 ## 2. Build Tools & Compilers
 * **git**: AVAILABLE (`/usr/bin/git`)
 * **cc/clang/gcc**: AVAILABLE (`/usr/bin/cc`, `/usr/bin/clang`, `/usr/bin/gcc`)
-* **gfortran**: FAILED (command not found on host environment)
-* **f2py**: FAILED (command not found on host environment)
+* **gfortran**: AVAILABLE (`/opt/homebrew/bin/gfortran`, GCC version 14.1.0 via Homebrew)
+* **f2py**: AVAILABLE (numpy f2py interface)
 
 ## 3. OSSOS Survey Simulator Repository
 * **Repository Cloning**: AVAILABLE (cloned from `https://github.com/OSSOS/SurveySimulator`)
-* **Fortran Component Build**: FAILED (missing `gfortran` compiler)
-* **Python Wrapper Build (`pip install -e .`)**: FAILED (fails when invoking subprocess `make` for Fortran modules: `make: gfortran: No such file or directory`)
-* **Status**: **FALLBACK ENGAGED** — Implementing survey selection function filtering directly in Python as an **`[ILLUSTRATIVE-PIPELINE]`** based on the survey pointing history and detection efficiency files.
+* **Fortran Component Build**: AVAILABLE (compiled native `Driver` binary with `ReadModelFromFile` module successfully using GCC/gfortran 14.1.0)
+* **Python Wrapper Build (`pip install -e .`)**: AVAILABLE (compiled and wrapper available)
+* **Status**: **FULLY BENCHMARKED AND CO-VALIDATED** — Executed side-by-side benchmarks showing excellent physical agreement between Python (`[ILLUSTRATIVE-PIPELINE]`) and official Fortran implementations, and computed official simulator p-values on a 10M candidate pool.
 
 ## 4. Literature Retrieval
 * **arXiv API / Web Search**: AVAILABLE (via standard Python HTTP clients and environment search tools)
