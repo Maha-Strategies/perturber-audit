@@ -6,7 +6,7 @@ hypothesis synthesis and a documented audit of the AI instrument that performed 
 
 This repository contains the reproducible code, data, and audit trail behind the paper
 **"The Perturber Question Under Audit"** (Revision 1, June 2026), archived on Zenodo with a
-permanent DOI (added on deposit) and written up at
+permanent DOI **10.5281/zenodo.20719485** (https://zenodo.org/records/20719485) and written up at
 **https://research.mahastrategies.com/papers/the_perturber_question**.
 
 > **Note on scope.** This is a human-directed AI-synthesis project, not original
