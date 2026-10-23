@@ -203,7 +203,7 @@ The prior draft located the boundary at the data: selection functions were said 
 - **Scripts:** `clustering_test.py` (Python pipeline and Rayleigh tests; seed 42), `run_real_benchmark.py` and `run_fortran_null_pool.py` (official-simulator benchmark).
 - **Outputs:** `clustering_results.txt`, `fortran_null_results.txt`, `simulated_null_varpi.txt`, `detected_population_fortran_tracked_10m.txt`, `benchmark_results.txt`, `null_varpi_distribution.png`.
 - **Audit artifacts:** `AUDIT_LOG.md`, `VERIFICATION_REPORT.md`, `DRAFT-agent-original.md` (the first draft, preserved as the failure-mode exhibit for §5.2), `DEPENDENCY_MATRIX.md`.
-- **Repository:** [URL to add on publication.]
+- **Repository:** https://github.com/Maha-Strategies/perturber-audit
 
 ## 7. Verification Ledger — Resolution Log
 
@@ -212,7 +212,7 @@ All computational and literature verification items raised during this paper's p
 **Resolved:** object identities and orbital elements (CFEPS pair verified against public detection records; OSSOS pair verified against MPC/JPL; two further rows spot-checked against Shankman et al. 2017 Table 1, including the ω sign-convention mapping for o5m85); sample completeness (reconstructed, N = 9 / N = 3); random seed (pinned, 42); official-simulator benchmark (compiled and executed, §2.5); Napier et al. (2021) headline figure (corrected to the published 17–94% uniform-consistency range); Fortney et al. (2016) photometric predictions (corrected to Rayleigh-scattering, near-solar-to-blue); prior-plausibility figures (specific numerical values removed as not singularly cited in the primary texts; qualitative claims retained); figure provenance (confirmed generated from the reconstructed samples).
 
 **Remaining before publication:**
-1. Repository URL (§6) — add on publication.
+1. Repository URL (§6) — resolved 23 October 2026: https://github.com/Maha-Strategies/perturber-audit
 2. Final human read of the complete manuscript.
 
 ## References
